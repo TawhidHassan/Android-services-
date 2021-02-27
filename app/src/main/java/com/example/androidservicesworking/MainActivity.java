@@ -1,11 +1,15 @@
 package com.example.androidservicesworking;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.ScrollView;
 import android.widget.TextView;
+
+import com.example.androidservicesworking.services.MyDwonloadService;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -31,13 +35,50 @@ public class MainActivity extends AppCompatActivity {
         mProgressBar = (ProgressBar) findViewById(R.id.progress_bar);
     }
 
+
+    public void runCode(View v) {
+        log("Running code");
+        displayProgressBar(true);
+
+        //send intent to download service
+
+        for (String song:Playlist.songs){
+            Intent intent=new Intent(MainActivity.this, MyDwonloadService.class);
+            intent.putExtra(MESSAGE_KEY,song);
+
+            startService(intent);
+        }
+
+    }
+
+
     public void clearOutput(View v) {
 
 
     }
 
-    public void runCode(View v) {
 
+    public void log(String message) {
+        Log.i(TAG, message);
+        mLog.append(message + "\n");
+        scrollTextToEnd();
+    }
+
+    private void scrollTextToEnd() {
+        mScroll.post(new Runnable() {
+            @Override
+            public void run() {
+                mScroll.fullScroll(ScrollView.FOCUS_DOWN);
+            }
+        });
+    }
+
+    public void displayProgressBar(boolean display) {
+        if (display) {
+            mProgressBar.setVisibility(View.VISIBLE);
+        } else {
+            mProgressBar.setVisibility(View.INVISIBLE);
+        }
     }
 
 }
