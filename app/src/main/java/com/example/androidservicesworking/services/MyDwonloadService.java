@@ -15,8 +15,14 @@ public class MyDwonloadService extends Service {
 
 
     @Override
-    public int onStartCommand(Intent intent, int flags, int startId) {
+    public void onCreate() {
+        super.onCreate();
+        Log.d(TAG,"onCreate Call");
+    }
 
+    @Override
+    public int onStartCommand(Intent intent, int flags, int startId) {
+        Log.d(TAG,"onStartCommand Call");
         String songName=intent.getStringExtra(MainActivity.MESSAGE_KEY);
         downloadSong(songName);
         return Service.START_REDELIVER_INTENT;
@@ -24,6 +30,7 @@ public class MyDwonloadService extends Service {
 
     @Override
     public IBinder onBind(Intent intent) {
+        Log.d(TAG,"onBind Call");
         return null;
     }
 
@@ -35,5 +42,11 @@ public class MyDwonloadService extends Service {
             e.printStackTrace();
         }
         Log.d(TAG, "downloadSong: "+songName+" Downloaded...");
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        Log.d(TAG,"onDestroy Call");
     }
 }
